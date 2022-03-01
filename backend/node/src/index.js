@@ -6,6 +6,7 @@ const cors = require('cors')
 const aws = require('aws-sdk'); //aws
 const sql = require('mssql')
 const con = require('../database/conection')
+require ('dotenv').config();
 
 //generar id random para imagenes
 const { v4: uuidv4 } = require('uuid');
@@ -72,7 +73,11 @@ app.post('/home',(req,res)=>{
     //falta obtener ruta de imagen en bd
 
     let ruta = "fotos/" + "default"+ ".jpg";
-   
+    aws.config.update({
+        region: process.env.REGION, 
+        accessKeyId: process.env.ACCESS_KEY_ID,
+        secretAccessKey: process.env.SECRET_ACCESS_KEY
+    });
     
 
     var S3 = new aws.S3();

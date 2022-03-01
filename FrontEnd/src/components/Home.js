@@ -16,7 +16,7 @@ export const Home = () => {
 
     const enviarDatos = async(event)=>{
         console.log(imagenmostrar)
-        
+        imagenmostrar.nombre = "foto"
         try {
             let configuracion = {
                 method: 'POST',
