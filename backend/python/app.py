@@ -1,3 +1,4 @@
+from crypt import methods
 from inspect import signature
 from uu import encode
 from flask import Flask, request, jsonify
@@ -5,14 +6,13 @@ import base64
 import json
 import io
 import boto3
+import pymssql
 from secret import key
 from botocore.config import Config
 from flask_cors import CORS
 
-
 app = Flask(__name__)
 CORS(app)
-
 
 # metodo post para subir imagens a S3
 @app.route('/uploadImage',methods=['POST'])
@@ -26,8 +26,6 @@ def addImage():
     )
     client.put_object(Body=img,Bucket='practica1-pruebag13',Key='fotos/prueba2.jpg')
     return 'ok'
-
-
 
 # metodo get para obtener imagenes del S3
 @app.route('/home', methods=['POST'])
@@ -44,9 +42,28 @@ def getImage():
     encoded = base64.b64encode(open("img/descarga.jpg", "rb").read())
     encoded_string = encoded.decode('utf-8')
     # retorno de json con la foto en base64  
-    print("---------------base 64--------------\n\n\n")
-    print(encoded_string)
     return {'foto':encoded_string}#str(encoded,encoding='ascii',errors='ignore')}
+
+
+@app.route('/conexion',methods=['GET'])
+def prueba():
+
+    try:
+        conn = pymssql.connect(key.direccion_servidor, key.nombre_usuario, key.password, key.nombre_bd)
+
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM seminario1.usuario')
+
+        for row in cursor:
+            print('row = %r' % (row,))
+
+        print("\n"*2)
+        print("conexión exitosa")
+        conn.close()
+    except Exception as e:
+        print("Ocurrió un error al conectar a SQL Server: ", e)
+
+    return 'ok'
 
 
 
@@ -56,5 +73,7 @@ def getImage():
 # pip install boto3
 # pip install flask
 # pip install -U flask-cors
+#pip install -U pip
+#pip install pymssql
 if __name__ == '__main__':
     app.run(debug=True,port=4500)
