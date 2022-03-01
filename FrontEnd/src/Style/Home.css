@@ -1,0 +1,14 @@
+#id_foto{
+}
+
+#foto_id{
+    margin-left: 40%;
+    width: 300px;
+    height:300px;
+    border-radius: 50%;
+}
+
+#id_informacion{
+    background-color:rgb(201, 126, 126);
+}
+

@@ -1,0 +1,19 @@
+#id_Login{
+    background: rgba(208, 207, 207, 0.391);
+    border-radius: 15px 50px;
+    width: 34%;
+    margin-left: 33%;
+    height:800px;
+    margin-top: 5%;
+}
+
+#id_formulario{
+    width: 70%;
+    margin-left: 15%;
+}
+
+#ingresar{
+    width:100%;
+    font-size:20px;
+    
+}
