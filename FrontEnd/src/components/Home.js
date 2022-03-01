@@ -5,18 +5,20 @@ import '../Style/Home.css'
 
 
 
-export const Home = () => {
+export function Home (){
 
     const[switchComp,setSwitch] = useState(false);
-    const [imagenmostrar,setimg]=useState({
-        img: "https://cdn.pixabay.com/photo/2015/02/09/20/03/koala-630117__340.jpg",
-        nombre: "Usuario Default",
-        username: "Username Default"
-    })
+    const [imagenmostrar,setimg]=useState("https://cdn.pixabay.com/photo/2015/02/09/20/03/koala-630117__340.jpg")
+    const [nombre,setnombre]=useState("Usuario Defaultt")
+    const [username,setusername]=useState("Username Defaultsss")
+    
+
+    function handleChange(evt) {
+        
+      }
 
     const enviarDatos = async(event)=>{
         console.log(imagenmostrar)
-        imagenmostrar.nombre = "foto"
         try {
             let configuracion = {
                 method: 'POST',
@@ -26,23 +28,24 @@ export const Home = () => {
                 },
                 body: JSON.stringify(setimg)
             }
-            let respuesta = await fetch('http://localhost:5000/home', configuracion)
+            let respuesta = await fetch('http://localhost:4500/home', configuracion)
             let json = await respuesta.json();
             console.log('valor de la respuesta json')
             console.log(json)
-            imagenmostrar.img = "data:image/png;base64, "+json.foto
-            imagenmostrar.nombre = "foto"
-            
+            setimg("data:image/png;base64, "+json.foto)
+            //setnombre(json.nombre) 
+            //setusername(json.username)
         } catch (error) {
         }
     }
+
 
 
   return (
     <div id="id_bodyHome">
                 <BarraNavegacion />
                 <div id="id_foto">
-                    <img id="foto_id" src={imagenmostrar.img} />
+                    <img id="foto_id" src={imagenmostrar} />
                 </div>
                 <div id="id_informacion">
                     <Form>
@@ -51,7 +54,7 @@ export const Home = () => {
                                 Nombre
                             </Form.Label>
                             <Col sm="10">
-                                <Form.Control plaintext readOnly defaultValue={imagenmostrar.nombre} />
+                                <Form.Control plaintext readOnly value={nombre} onChange={handleChange} />
                             </Col>
                         </Form.Group>
 
@@ -60,7 +63,7 @@ export const Home = () => {
                                 Username
                             </Form.Label>
                             <Col sm="10">
-                                <Form.Control plaintext readOnly defaultValue={imagenmostrar.username}/>
+                                <Form.Control plaintext readOnly defaultValue={username} onChange={handleChange}/>
                             </Col>
                         </Form.Group>
                     </Form>
