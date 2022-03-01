@@ -5,7 +5,7 @@ export default function Presentacion() {
 
     const [imagenmostrar,setimg]=useState("https://cdn.pixabay.com/photo/2015/02/09/20/03/koala-630117__340.jpg")
     const [nombre,setnombre]=useState("Usuario Defaultt")
-    const [username,setusername]=useState("Username Defaultsss")
+    const [username,setusername]=useState("rivadeneira14")
 
 
     const enviarDatos = async(event)=>{
@@ -17,7 +17,7 @@ export default function Presentacion() {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(setimg)
+                body: JSON.stringify({"username" : username})
             }
             let respuesta = await fetch('http://localhost:4500/home', configuracion)
             let json = await respuesta.json();

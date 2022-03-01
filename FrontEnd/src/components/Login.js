@@ -37,7 +37,7 @@ const enviarDatos = async(event)=>{
       let json = await respuesta.json();
       console.log('valor de la respuesta json')
       console.log(json)
-      //validacion si es true o false
+      //validacion si es true  o false
       //realizar la redireccion de pagina
   } catch (error) {
   }
@@ -69,7 +69,7 @@ const enviarDatos = async(event)=>{
             <br/>
             <br/>
             <center>
-            <Button  id="ingresar" variant="primary" onClick={enviarDatos}>
+            <Button  id="ingresar" variant="primary" onClick={enviarDatos} href="/home"> 
               Ingresar
             </Button>{' '}
             </center>
