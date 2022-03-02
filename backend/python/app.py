@@ -104,6 +104,7 @@ def getImage():
 
     return jsonRespuesta
 
+#API EDITAR EL PERFIL
 @app.route('/editarPerfil', methods=['POST'])
 def editProfile():
     try:
@@ -150,10 +151,63 @@ def editProfile():
 
     return {'respuesta' : save}
 
+#API QUE RETORNA INFORMACION PARA PANTALLA INICIAL DE CARGAR UNA FOTO
+@app.route('/subirfoto',methods=['POST'])
+def uploadPhoto():
+    album = []
+    try:
+        #iniciando conexion con bd
+        cursor = conn.cursor()
+        #ejecutando procedimiento para validar si usuario existe
+        msg = cursor.callproc('OBTENERALBUM', (request.json['username'],pymssql.output(int),))
+        #finalizando conexion con bd
+        if msg[1] != 0:
+            for row in cursor:
+                #print(row[0])
+                album.append({'nombre' : row[0]})
+        cursor.close()
+    except Exception as e:
+        print("Ocurrió un error al realizar el registro: ", e)
+
+    return {'albums' : album}
+
+#API QUE CARGA UNA FOTO AL ALBUM ESPECIFICADO
+@app.route('/cargarfoto',methods=['POST'])
+def loadPhoto():
+    save = 0
+    try:
+        #iniciando conexion con bd
+        cursor = conn.cursor()
+        #proc exec CARGARIMAGEN username, albumname, imagename, imagepath, response
+        ruta = nuevaRuta()
+        #ejecutando procedimiento para validar si usuario existe
+        msg = cursor.callproc('CARGARIMAGEN', (request.json['username'],request.json['album'],request.json['nombrefoto'],ruta,pymssql.output(int),))
+        #si se inserto en bd exitosamente
+        if msg[4] == 1:
+            #convirtiendo a base64
+            img = base64.b64decode(request.json['foto'])
+            buf = io.BytesIO(img)
+            #cargando credenciales bucket
+            client = boto3.client('s3',
+                aws_access_key_id=key.ACCES_KEY_ID,
+                aws_secret_access_key=key.ACCES_SECRET_KEY
+            )
+            #subiendo imagen a bucket
+            client.put_object(Body=img,Bucket='practica1-pruebag13',Key=ruta)
+            save = 1
+        else:
+            save = 0
+        #finalizando conexion con bd
+        cursor.close()
+    except Exception as e:
+        print("Ocurrió un error al realizar el registro: ", e)
+
+    return {'respuesta' : save}
+
+#FUNCION QUE GENERA IDS UNICOS PARA IMAGENES
 def nuevaRuta():
     ruta  = 'fotos/' + str(uuid.uuid4()) + '.jpg'
     return ruta
-
 
 # inicializaicon de la aplicacion
 # arrancar app con -> python app.py
