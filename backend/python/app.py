@@ -29,7 +29,7 @@ def addImage():
     return 'ok'
 
 #API REGISTRO DE USUARIOS
-@app.route('/registro',methods=['POST'])
+@app.route('/nuevousuario',methods=['POST'])
 def newUser():
     try:
         cursor = conn.cursor()
