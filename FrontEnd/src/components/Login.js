@@ -18,12 +18,11 @@ export default function Login() {
     ...datos,
     [evt.target.name]: value
   });
-    console.log(datos.username)
-    console.log(datos.password)
+    //console.log(datos.username)
+    //console.log(datos.password)
 }
 
 const enviarDatos = async(event)=>{
-
   try {
       let configuracion = {
           method: 'POST',
@@ -37,6 +36,14 @@ const enviarDatos = async(event)=>{
       let json = await respuesta.json();
       console.log('valor de la respuesta json')
       console.log(json)
+      let resp = json.respuesta
+      if(resp == 1){
+        //si es true redirect
+        window.location.href = "/home";
+      }
+      else{
+        alert("Credenciales incorrectas")
+      }
       //validacion si es true  o false
       //realizar la redireccion de pagina
   } catch (error) {
@@ -69,7 +76,7 @@ const enviarDatos = async(event)=>{
             <br/>
             <br/>
             <center>
-            <Button  id="ingresar" variant="primary" onClick={enviarDatos} href="/home"> 
+            <Button  id="ingresar" variant="primary" onClick={enviarDatos} > 
               Ingresar
             </Button>{' '}
             </center>

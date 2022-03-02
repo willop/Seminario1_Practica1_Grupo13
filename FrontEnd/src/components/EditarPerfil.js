@@ -1,0 +1,145 @@
+import React, { useState, useEffect } from 'react'
+import { Form, Button, Row, Col, Navbar, Nav, NavDropdown, Container } from 'react-bootstrap'
+import BarraNavegacion from '../components/BarraNavegacion'
+import '../Style/EditarPerfil.css'
+
+export default function EditarPerfil() {
+
+    const [datos, setDatos] = useState({
+        username: '',
+        newusername: '',
+        name: '',
+        password: '',
+        password2: '',
+        foto: ''
+    })
+
+    const handleuserchange = (evt) => {
+        const value = evt.target.value;
+        setDatos({
+            ...datos,
+            [evt.target.name]: value
+        });
+    }
+
+
+
+    const filesSelectedHandler = async (event) => {
+        //console.log(event.target.files[0]);
+        const filefoto = event.target.files[0];
+        const base64 = await convertobase64(filefoto);
+        console.log(base64)
+        datos.foto = base64
+        console.log(datos.username)
+        console.log(datos.foto)
+
+    }
+
+    const convertobase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const fileReader = new FileReader();
+            fileReader.readAsDataURL(file);
+
+            fileReader.onload = () => {
+                resolve(fileReader.result)
+            };
+
+            fileReader.onerror = (error) => {
+                reject(error);
+            }
+        });
+    }
+
+    const enviarDatos = async (event) => {
+
+        if (datos.password == datos.password2) {
+            console.log(datos)
+            try {
+                let configuracion = {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(datos)
+                }
+                let respuesta = await fetch('http://localhost:4500/editarPerfil', configuracion)
+                let json = await respuesta.json();
+                console.log('valor de la respuesta json')
+                console.log(json)
+                let resp = json.respuesta
+                if (resp == 1) {
+                    //si es true redirect
+                    window.location.href = "/home";
+                }
+                else {
+                    alert("El usuario no se ha podido crear")
+                }
+                //validacion si es true o false
+                //realizar la redireccion de pagina
+            } catch (error) {
+            }
+        }
+        else {
+            alert("Las contraseñas no coinciden")
+        }
+    }
+
+
+
+    return (
+        <div>
+            <div id="id_bodyLogin">
+
+                <div id="id_Login">
+                    <center>
+                        <br />
+                        <h1>Editar Perfil</h1>
+                    </center>
+                    <br />
+                    <br />
+                    <div id="id_formulario">
+                        <Form>
+                            <Form.Group className="mb-2" >
+                                <h4>Username</h4>
+                                <Form.Control name="newusername" onChange={handleuserchange} placeholder="Ingese username" />
+                            </Form.Group>
+                            <br />
+
+                            <Form.Group className="mb-2" >
+                                <h4>Nombre Completo</h4>
+                                <Form.Control name="name" onChange={handleuserchange} placeholder="Ingrese su nombre completo" />
+                            </Form.Group>
+                            <br />
+                            <Form.Group className="mb-2" >
+                                <h4>Contraseña</h4>
+                                <Form.Control type="password" onChange={handleuserchange} name="password" placeholder="Ingrese contraseña" />
+                            </Form.Group>
+                            <br />
+                            <Form.Group className="mb-2" >
+                                <h4>Confirmar contraseña</h4>
+                                <Form.Control type="password" onChange={handleuserchange} name="password2" placeholder="Ingrese de nuevo su contraseña" />
+                            </Form.Group>
+                            <br />
+                            <Form.Group className="mb-3">
+                                <h4>Foto de usuario</h4>
+                                <Form.Control type="file" onChange={filesSelectedHandler} name="foto" multiple />
+                            </Form.Group>
+                            <br />
+                            <center>
+                                <Button id="ingresar" variant="success" onClick={enviarDatos} >
+                                    Editar datos
+                                </Button>
+                                <br/>
+                                <br/>
+                                <Button id="ingresar2" variant="primary" href="/home" >
+                                    Regresar
+                                </Button>
+                            </center>
+                        </Form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}

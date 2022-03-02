@@ -10,7 +10,7 @@ export default function BarraNavegacion() {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link href="#features">Editar</Nav.Link>
+              <Nav.Link href="/editarperfil">Editar</Nav.Link>
             </Nav>
             <Nav className="justify-content-end">
               <Nav.Link href="#deets">Cerrar sesion</Nav.Link>
