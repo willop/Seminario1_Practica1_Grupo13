@@ -164,7 +164,7 @@ def uploadPhoto():
         if msg[1] != 0:
             for row in cursor:
                 #print(row[0])
-                album.append({'nombre' : row[0]})
+                album.append({'name' : row[0]})
         cursor.close()
     except Exception as e:
         print("Ocurrió un error al realizar el registro: ", e)

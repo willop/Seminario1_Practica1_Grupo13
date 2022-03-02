@@ -21,6 +21,10 @@ app.use('/',require('./routes/login'))
 app.use('/',require('./routes/registro'))
 //API EDITAR PERFIL
 app.use('/',require('./routes/editarPerfil'))
+//API SUBIR FOTO
+app.use('/',require('./routes/subirFoto'))
+//API QUE CARGA FOTO
+app.use('/',require('./routes/cargarFoto'))
 
 //SERVER LISTENING
 app.listen(app.get('port'), () => {
