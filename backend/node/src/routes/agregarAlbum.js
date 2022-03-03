@@ -4,20 +4,20 @@ const router = Router();
 const sql = require('mssql')//sql server node
 const con = require('../../database/conection')//conexion bd
 
-router.post('/subirfoto', async (req, res) => {
-    let r = [];
+//API QUE AGREGA UN NUEVO ALBUM AL USUARIO
+router.post('/agregaralbum', async (req, res) => {
+    let r = 0;
     try {
-        const { username} = req.body;
+        const {username,album} = req.body;
         const pool = await con;
         const result = await pool.request()
             .input('username', username)
+            .input('newalbumname', album)
             .output('response', sql.Int)
-            .execute(`OBTENERALBUM`);
-        if ( result.recordset != undefined){
-            r = result.recordset;
-        }
+            .execute(`CREARALBUM`);
+        r = result.output.response
     } catch (error) {
-        r = [];
+        r = 0;
     }
     res.json({respuesta: r});
 });

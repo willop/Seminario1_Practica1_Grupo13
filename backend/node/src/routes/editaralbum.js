@@ -3,8 +3,8 @@ const router = Router();
 
 const sql = require('mssql')//sql server node
 const con = require('../../database/conection')//conexion bd
-
-router.post('/subirfoto', async (req, res) => {
+//API DE PANTALLA INICIAL DE EDITAR ALBUM
+router.post('/editaralbum', async (req, res) => {
     let r = [];
     try {
         const { username} = req.body;

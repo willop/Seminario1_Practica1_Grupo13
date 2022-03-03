@@ -14,17 +14,29 @@ app.use(cors());
 //ROUTES
 
 //API HOME
-app.use('/',require('./routes/home'))
+app.use('/',require('./routes/home'));
 //API LOGIN
-app.use('/',require('./routes/login'))
+app.use('/',require('./routes/login'));
 //API REGISTRO
-app.use('/',require('./routes/registro'))
+app.use('/',require('./routes/registro'));
 //API EDITAR PERFIL
-app.use('/',require('./routes/editarPerfil'))
-//API SUBIR FOTO
-app.use('/',require('./routes/subirFoto'))
+app.use('/',require('./routes/editarPerfil'));
+//API DE PANTALLA DE CARGA SUBIR FOTO
+app.use('/',require('./routes/subirFoto'));
 //API QUE CARGA FOTO
-app.use('/',require('./routes/cargarFoto'))
+app.use('/',require('./routes/cargarFoto'));
+//API DE PANTALLA DE CARGA EDITAR ALBUM
+app.use('/',require('./routes/editaralbum'));
+//API QUE AGREGA UN NUEVO ALBUM
+app.use('/',require('./routes/agregarAlbum'));
+//API QUE MODIFICA UN ALBUM
+app.use('/',require('./routes/modificarAlbum'));
+//API QUE ELIMINA UN ALBUM
+app.use('/',require('./routes/eliminarAlbum'));
+//API QUE RETORNA LAS FOTOS POR ALBUM
+app.use('/',require('./routes/eliminarAlbum'));
+
+
 
 //SERVER LISTENING
 app.listen(app.get('port'), () => {
