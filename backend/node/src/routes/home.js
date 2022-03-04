@@ -29,7 +29,6 @@ router.post('/home', async (req, res) => {
 
     if (resp) {
         var S3 = new aws.S3();
-
         aws.config.update({
             region: process.env.REGION,
             accessKeyId: process.env.ACCESS_KEY_ID,
@@ -44,7 +43,8 @@ router.post('/home', async (req, res) => {
 
         S3.getObject(getParams, function (err, data) {
             if (err) {
-                result = err;
+                console.log(err)
+                res.json({ username: "", name: "", foto: "", response: 0 })
             } else {
                 result = Buffer.from(data.Body).toString('base64')
                 res.json({ username: username, name: name, foto: result, response: resp })

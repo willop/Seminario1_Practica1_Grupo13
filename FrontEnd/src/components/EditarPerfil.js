@@ -2,15 +2,18 @@ import React, { useState, useEffect } from 'react'
 import { Form, Button, Row, Col, Navbar, Nav, NavDropdown, Container } from 'react-bootstrap'
 import BarraNavegacion from '../components/BarraNavegacion'
 import '../Style/EditarPerfil.css'
+import Cookies from 'universal-cookie'
+
 
 export default function EditarPerfil() {
 
+    const cookies = new Cookies();
     const [datos, setDatos] = useState({
-        username: '',
+        username: cookies.get('cookieusername'),
         newusername: '',
         name: '',
         password: '',
-        password2: '',
+        cambiarImagen:0,
         foto: ''
     })
 
@@ -28,10 +31,14 @@ export default function EditarPerfil() {
         //console.log(event.target.files[0]);
         const filefoto = event.target.files[0];
         const base64 = await convertobase64(filefoto);
-        console.log(base64)
-        datos.foto = base64
+        const newbase64 = base64.slice(23)
+        console.log(newbase64)
+        datos.foto = newbase64
+        datos.cambiarImagen = 1;
         console.log(datos.username)
         console.log(datos.foto)
+        console.log(datos.cambiarImagen)
+
 
     }
 
@@ -51,8 +58,6 @@ export default function EditarPerfil() {
     }
 
     const enviarDatos = async (event) => {
-
-        if (datos.password == datos.password2) {
             console.log(datos)
             try {
                 let configuracion = {
@@ -63,7 +68,7 @@ export default function EditarPerfil() {
                     },
                     body: JSON.stringify(datos)
                 }
-                let respuesta = await fetch('http://localhost:4500/editarPerfil', configuracion)
+                let respuesta = await fetch('http://localhost:5000/editarPerfil', configuracion)
                 let json = await respuesta.json();
                 console.log('valor de la respuesta json')
                 console.log(json)
@@ -75,14 +80,9 @@ export default function EditarPerfil() {
                 else {
                     alert("El usuario no se ha podido crear")
                 }
-                //validacion si es true o false
-                //realizar la redireccion de pagina
             } catch (error) {
             }
-        }
-        else {
-            alert("Las contraseñas no coinciden")
-        }
+        
     }
 
 
@@ -112,13 +112,8 @@ export default function EditarPerfil() {
                             </Form.Group>
                             <br />
                             <Form.Group className="mb-2" >
-                                <h4>Contraseña</h4>
-                                <Form.Control type="password" onChange={handleuserchange} name="password" placeholder="Ingrese contraseña" />
-                            </Form.Group>
-                            <br />
-                            <Form.Group className="mb-2" >
                                 <h4>Confirmar contraseña</h4>
-                                <Form.Control type="password" onChange={handleuserchange} name="password2" placeholder="Ingrese de nuevo su contraseña" />
+                                <Form.Control type="password" onChange={handleuserchange} name="password" placeholder="Ingrese de nuevo su contraseña" />
                             </Form.Group>
                             <br />
                             <Form.Group className="mb-3">

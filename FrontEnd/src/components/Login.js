@@ -2,6 +2,7 @@ import React, { Component ,useState } from 'react'
 import {Form, Button} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "../Style/Login.css"
+import Cookies from 'universal-cookie'
 //import Cookies from 'universal-cookie';
 
 export default function Login() {
@@ -32,13 +33,17 @@ const enviarDatos = async(event)=>{
           },
           body: JSON.stringify(datos)
       }
-      let respuesta = await fetch('http://localhost:4500/login', configuracion)
+      let respuesta = await fetch('http://localhost:5000/login', configuracion)
       let json = await respuesta.json();
       console.log('valor de la respuesta json')
       console.log(json)
       let resp = json.respuesta
       if(resp == 1){
         //si es true redirect
+        const cookies = new Cookies();
+        cookies.set('cookieusername',datos.username,{path:'/'});
+        cookies.set('cookiepassword',datos.password,{path:'/'});
+
         window.location.href = "/home";
       }
       else{
@@ -76,9 +81,15 @@ const enviarDatos = async(event)=>{
             <br/>
             <br/>
             <center>
-            <Button  id="ingresar" variant="primary" onClick={enviarDatos} > 
+            <Button  id="ingresar" variant="success" onClick={enviarDatos} > 
               Ingresar
-            </Button>{' '}
+            </Button>
+            <br/>
+            <br/>
+
+            <Button  id="ingresar2" variant="primary" href="/NuevoUsuario" > 
+              Nuevo usuario
+            </Button>
             </center>
           </Form>
           </div>

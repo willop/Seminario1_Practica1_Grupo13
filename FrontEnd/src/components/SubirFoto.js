@@ -4,27 +4,30 @@ import BarraNavegacion from '../components/BarraNavegacion'
 import '../Style/SubirFoto.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AlbumComponent from './album/AlbumComponent'
+import Cookies from 'universal-cookie'
+
 
 export default function SubirFoto() {
 
-    const [img, setimg] = useState("https://cdn.pixabay.com/photo/2015/02/09/20/03/koala-630117__340.jpg")
-    const [nombrealbum, setnombrealbum]= useState("Lista de albumes :)")
+    const cookies = new Cookies();
+    const [estadopag, setestadopag]=useState(false)
+    const [img, setimg] = useState(cookies.get('cookiimg'))
+    const [nombrealbum, setnombrealbum]= useState("Lista de albumes ")
     const [enviar, setenviar] = useState({
-        username: '',
+        username: cookies.get('cookieusername'),
         nombrefoto: '',
         album: 'Lista de albumes',
-        foto: ''
+        foto: cookies.get('cookiimg')
     })
 
     const [albums, seralbums] = useState([
         {
-            nombre: "album1asdfasdf"
+            name: "album1asdfasdf"
         },
         {
-            nombre: "album2dddd"
+            name: "album2dddd"
         }
     ])
-
 
 
     const albumes = [
@@ -35,8 +38,9 @@ export default function SubirFoto() {
         //console.log(event.target.files[0]);
         const filefoto = event.target.files[0];
         const base64 = await convertobase64(filefoto);
+        const newbase64 = base64.slice(23)
         //console.log(base64)
-        enviar.foto = base64;
+        enviar.foto = newbase64;
         console.log(enviar)
         setimg(URL.createObjectURL(event.target.files[0]))
     }
@@ -81,8 +85,26 @@ export default function SubirFoto() {
 
     }
 
+    const InicioDatos = async (event) => {
+        try {
+            let configuracion = {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ "username": enviar.username })
+            }
+            let respuesta = await fetch('http://localhost:5000/subirfoto', configuracion)
+            let json = await respuesta.json();
+            console.log('valor de la respuesta json')
+            console.log(json)
+            seralbums(json.respuesta)
+            console.log("Mostrando los albumes almacenados",albumes)
 
-    
+        } catch (error) {
+        }
+    }
 
 
     const convertobase64 = (file) => {
@@ -100,25 +122,34 @@ export default function SubirFoto() {
         });
     }
 
+
+
+    useEffect(function () {
+        console.log("Hola al iniciar la app")
+        if (estadopag == false) {
+            InicioDatos()
+            setestadopag(true)
+        }
+        else{
+            setestadopag(true)
+        }
+    })
+
+
+
     return (
         <div>
             <BarraNavegacion />
             <center>
                 <div id="id_contenedor">
-                    <img id="imagen_update" src={img}></img>
                     <Form.Group className="mb-3">
                         <h4>Agregar foto</h4>
                         <Form.Control type="file" onChange={filesSelectedHandler} name="foto" multiple />
                     </Form.Group>
                     <br />
                     <Form.Group className="mb-3">
-                        <h4>Nombre</h4>
+                        <h4>Nombre de la fotografia</h4>
                         <Form.Control type="text" onChange={handleuserchange} name="nombrefoto" multiple />
-                    </Form.Group>
-                    <br />
-                    <Form.Group className="mb-3">
-                        <h4>Nombre Album</h4>
-                        <Form.Control type="text" onChange={handleuserchange} name="album" multiple />
                     </Form.Group>
                     <br />
 
@@ -127,10 +158,9 @@ export default function SubirFoto() {
                             {nombrealbum}
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
-
                             {albums.map((album) => {
                                 return (
-                                        <AlbumComponent namee = {album.nombre}/>
+                                        <AlbumComponent namee = {album.name} key={album.name}/>
                                 )
                             })}
 
@@ -138,7 +168,7 @@ export default function SubirFoto() {
                     </Dropdown>
                     <br />
                     <br />
-                    <Button variant="success" onClick={enviarDatos}>Ver Fotos</Button>
+                    <Button variant="success" onClick={enviarDatos}>Agregar fotografia</Button>
                 </div>
             </center>
         </div>

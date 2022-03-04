@@ -23,6 +23,7 @@ function insertarImagenBucket(ruta,foto){
     };
 
     const putResult = s3.putObject(params).promise();
+    console.log("resultado bucket: ",putResult)
 }
 
 module.exports.insertarImagenBucket = insertarImagenBucket;

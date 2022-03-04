@@ -4,7 +4,7 @@ import "../Style/Registro.css"
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
-
+    
 export default function Registro() {
 
     const [datos, setDatos] = useState({
@@ -25,14 +25,15 @@ export default function Registro() {
 
 
 
+
     const filesSelectedHandler = async (event) => {
         //console.log(event.target.files[0]);
         const filefoto = event.target.files[0];
         const base64 = await convertobase64(filefoto);
-        console.log(base64)
-        datos.foto = base64
-        console.log(datos.username)
-        console.log(datos.foto)
+        const newbase64 = base64.slice(23)
+        console.log(newbase64)
+        datos.foto = newbase64
+        console.log("Datos ingresados antes de enviar",datos)
     }
     
 
@@ -52,6 +53,7 @@ export default function Registro() {
     }
 
 
+
     
     const enviarDatos = async (event) => {
 
@@ -66,7 +68,7 @@ export default function Registro() {
                     },
                     body: JSON.stringify(datos)
                 }
-                let respuesta = await fetch('http://localhost:4500/login', configuracion)
+                let respuesta = await fetch('http://localhost:5000/nuevousuario', configuracion)
                 let json = await respuesta.json();
                 console.log('valor de la respuesta json')
                 console.log(json)
@@ -122,6 +124,9 @@ export default function Registro() {
                             <Button id="ingresar" variant="primary" onClick={enviarDatos} >
                                 Registrar Usuario
                             </Button>
+                            <br />
+                            <br/>
+                            <Button variant="danger"  href="/" >Regresar login</Button>
                         </center>
                     </Form>
                 </div>
@@ -129,4 +134,3 @@ export default function Registro() {
         </div>
     )
 }
-
