@@ -7,6 +7,7 @@ import io
 import boto3
 import pymssql
 import uuid
+import json
 from secret import key
 from conection import conn
 from botocore.config import Config
@@ -208,6 +209,111 @@ def loadPhoto():
 def nuevaRuta():
     ruta  = 'fotos/' + str(uuid.uuid4()) + '.jpg'
     return ruta
+
+
+
+# API PARA LA CRECION DE UN ARBOL
+@app.route('/agregaralbum',methods=['POST'])
+def addAlbum():
+    answer = 0
+    # menejo de errores
+    try:
+        # conexion a la bd
+        cursor = conn.cursor()
+        msg = cursor.callproc('CREARALBUM  ', (request.json['username'],request.json['album'],pymssql.output(int),))  
+        # comparacion de la respuesta de la bd
+        if msg[2]:
+            answer = 1
+        else:
+            answer = 0
+        cursor.close()
+    except Exception as e:
+        print("Ocurrió un error al realizar el registro: ", e)
+
+    return {'reponse':answer}
+
+
+
+# API PARA LA ELIMINACION DE ALBUM
+@app.route('/eliminaralbum',methods=['POST'])
+def deleteAlbum():
+    answer = 0
+    # menejo de errores
+    try:
+        # conexion a la bd
+        cursor = conn.cursor()
+        msg = cursor.callproc('ELIMINARALBUM', (request.json['username'],request.json['album'],pymssql.output(int),))  
+        # comparacion de la respuesta de la bd
+        if msg[2]:
+            answer = 1
+        else:
+            answer = 0
+        cursor.close()
+    except Exception as e:
+        print("Ocurrió un error al realizar el registro: ", e)
+
+    return {'response':answer}
+
+
+# API PARA MODIFICAR UN ALMBUM
+@app.route('/modificaralbum',methods=['POST'])
+def editAlbum():
+    answer = 0
+    # menejo de errores
+    try:
+        # conexion a la bd
+        cursor = conn.cursor()
+        msg = cursor.callproc('MODIFICARALBUM', (request.json['username'],request.json['albumname'],request.json['newalbumname'],pymssql.output(int),))  
+        # comparacion de la respuesta de la bd
+        print(msg)
+        if msg[3]:
+            answer = 1
+        else:
+            answer = 0
+        cursor.close()
+    except Exception as e:
+        print("Ocurrió un error al realizar el registro: ", e)
+
+    return {'reponse':answer}
+
+
+# API PARA EDITAR ALBUNES
+@app.route('/editaralbum', methods=['POST'])
+def editarAlbunes():
+    ralbum = []
+    try:
+        #iniciando conexion con bd
+        cursor = conn.cursor()
+        #ejecutando procedimiento para validar si usuario existe
+        msg = cursor.callproc('OBTENERALBUM', (request.json['username'],pymssql.output(int),))
+        #finalizando conexion con bd
+        if msg[1] != 0:
+            for row in cursor:
+                ralbum.append({'name' : row[0]})
+        cursor.close()
+    except Exception as e:
+        print("Ocurrió un error al realizar el registro: ", e)
+
+    return {'albums' : ralbum}
+
+
+#API PARA VER FOTOS
+@app.route('/verfotos', methods=['POST'])
+def verFotos():
+    dataJson = {}
+    try:
+        #iniciando conexion con bd
+        cursor = conn.cursor()
+        #ejecutando procedimiento para validar si usuario existe
+        msg = cursor.callproc('VERFOTOS', (request.json['username'],pymssql.output(int),))
+        for row in cursor:
+            album = []
+            album.append([row[0],row[1]])
+        cursor.close()
+    except Exception as e:
+        print("Ocurrió un error al obtener las fotos de un usuario: ", e)
+    return dataJson
+
 
 # inicializaicon de la aplicacion
 # arrancar app con -> python app.py
