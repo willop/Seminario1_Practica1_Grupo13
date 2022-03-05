@@ -11,13 +11,13 @@ export default function SubirFoto() {
 
     const cookies = new Cookies();
     const [estadopag, setestadopag]=useState(false)
-    const [img, setimg] = useState(cookies.get('cookiimg'))
+    const [img, setimg] = useState()
     const [nombrealbum, setnombrealbum]= useState("Lista de albumes ")
     const [enviar, setenviar] = useState({
         username: cookies.get('cookieusername'),
         nombrefoto: '',
         album: 'Lista de albumes',
-        foto: cookies.get('cookiimg')
+        foto: ''
     })
 
     const [albums, seralbums] = useState([
@@ -73,11 +73,18 @@ export default function SubirFoto() {
                 },
                 body: JSON.stringify(enviar)
             }
-            let respuesta = await fetch('http://localhost:4500/cargarfoto', configuracion)
+            let respuesta = await fetch('http://localhost:5000/cargarfoto', configuracion)
             let json = await respuesta.json();
             console.log('valor de la respuesta json')
             console.log(json)
-
+            if(json.respuesta == 0){
+                alert("No se ha podido agregar la nueva foto")
+                window.location.href = "/home";
+            }
+            else{
+                alert("Nueva imagen agregada con exito")
+                window.location.href = "/home";
+            }
             //validacion si es true o false
             //realizar la redireccion de pagina
         } catch (error) {
@@ -142,6 +149,10 @@ export default function SubirFoto() {
             <BarraNavegacion />
             <center>
                 <div id="id_contenedor">
+                    <img src={img} id="imagen"/>
+                    <br/>
+                    <br/>
+                    <br/>
                     <Form.Group className="mb-3">
                         <h4>Agregar foto</h4>
                         <Form.Control type="file" onChange={filesSelectedHandler} name="foto" multiple />

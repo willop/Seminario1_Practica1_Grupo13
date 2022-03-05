@@ -2,15 +2,20 @@ import React, { useState, useEffect } from 'react'
 import { Form, Button,Dropdown, Row, Col, Navbar, Nav, NavDropdown,  } from 'react-bootstrap'
 import BarraNavegacion from '../components/BarraNavegacion'
 import AlbumComponent from './album/AlbumComponent'
+import Cookies from 'universal-cookie'
+import '../Style/EditarAlbumes.css'
 
 export default function EditarAlbumes() {
 
-    const [username, setusername] = useState("rivadeneira15")
+    const cookies = new Cookies();
+
+    const [username, setusername] = useState(cookies.get('cookieusername'))
     const [albummodifica, setalbummodificar] = useState("empy")
     const [estadopag, setestadopag]=useState(false)
     const [nombrealbum, setnombrealbum]= useState("Lista de albumes ")
     const [img, setimg] = useState("https://cdn.pixabay.com/photo/2015/02/09/20/03/koala-630117__340.jpg")
-    const [albumes, setalbumes] = useState ([
+    const [albumes, setalbumes] = useState (
+        [
         {
             "name": "ejj"
         },
@@ -23,9 +28,17 @@ export default function EditarAlbumes() {
         {
             "name": "perasdfasdfl"
         }
-    ])
+    ]
+    )
 
     const [agregar, setagregar] = useState({
+        username: cookies.get('cookieusername'),
+        album: 'album quemado',
+        newalbumname: ''
+    })
+
+    const [agregar2, setagregar2] = useState({
+        username: cookies.get('cookieusername'),
         album: 'album quemado',
     })
 
@@ -59,23 +72,28 @@ export default function EditarAlbumes() {
                                     AGREGAR ALBUM 
     ----------------------------------------------------------------------------*/
     const AgregarAlbum = async (event) => {
+        console.log(agregar2)
         try {
             console.log("Datos agregar: ")
-            console.log(agregar)
+            console.log(agregar2)
             let configuracion = {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(agregar)
+                body: JSON.stringify(agregar2)
             }
-            let respuesta = await fetch('http://localhost:4500/agregaralbum', configuracion)
+            let respuesta = await fetch('http://localhost:5000/agregaralbum', configuracion)
             let json = await respuesta.json();
-            console.log('valor de la respuesta json')
-            console.log(json)
-            setimg("data:image/png;base64, " + json.foto)
-            setalbumes(json.albums)
+            if(json.reponse == 0){
+                alert("No se ha podido agregar el nuevo album")
+                window.location.href = "/home";
+            }
+            else{
+                alert("Nuevo album creado con exito")
+                window.location.href = "/home";
+            }
         } catch (error) {
         }
     }
@@ -95,12 +113,16 @@ export default function EditarAlbumes() {
                 },
                 body: JSON.stringify(agregar)
             }
-            let respuesta = await fetch('http://localhost:4500/agregaralbum', configuracion)
+            let respuesta = await fetch('http://localhost:5000/modificaralbum', configuracion)
             let json = await respuesta.json();
-            console.log('valor de la respuesta json')
-            console.log(json)
-            setimg("data:image/png;base64, " + json.foto)
-            setalbumes(json.albums)
+            if(json.reponse == 0){
+                alert("No se ha podido agregar el nuevo album")
+                window.location.href = "/home";
+            }
+            else{
+                alert("Nuevo album creado con exito")
+                window.location.href = "/home";
+            }
         } catch (error) {
         }
     }
@@ -120,12 +142,15 @@ export default function EditarAlbumes() {
                 },
                 body: JSON.stringify(agregar)
             }
-            let respuesta = await fetch('http://localhost:4500/agregaralbum', configuracion)
+            let respuesta = await fetch('http://localhost:5000/eliminaralbum', configuracion)
             let json = await respuesta.json();
-            console.log('valor de la respuesta json')
-            console.log(json)
-            setimg("data:image/png;base64, " + json.foto)
-            setalbumes(json.albums)
+            if(json.reponse == 0){
+                alert("No se ha podido eliminar el album")
+            }
+            else{
+                alert("Eliminacion exitosa")
+                window.location.href = "/home";
+            }
         } catch (error) {
         }
     }
@@ -142,6 +167,7 @@ export default function EditarAlbumes() {
         console.log("modificado: ",albummodifica)
     }
 
+
     const handleuserchange = (evt) => {
         const value = evt.target.value;
         setagregar({
@@ -149,9 +175,9 @@ export default function EditarAlbumes() {
             [evt.target.name]: value
         });
         console.log("Cambio de valor textbox")
-        setalbummodificar(value)
+        agregar2.album = value;
+        agregar.newalbumname = value;
         console.log(agregar)
-        console.log("modificado: ",albummodifica)
     }
     
 
@@ -171,12 +197,14 @@ export default function EditarAlbumes() {
            <BarraNavegacion/>
             <div id="id_contenedor">
                 <br />
-                <Form.Group className="mb-3">
+                <center>
+                <Form.Group className="mb-2">
                     <h4>Nombre Album</h4>
-                    <Form.Control type="text"  onChange={handleuserchange} name="album" multiple />
+                    <Form.Control type="text" onChange={handleuserchange} name="newalbumname" multiple />
                 </Form.Group>
                 <br />
-
+                </center>
+                <center>
                 <Dropdown className="d-inline mx-2" onClick={handlenamechange} >
                     <Dropdown.Toggle id="dropdown-autoclose-true" >
                         {nombrealbum}
@@ -189,14 +217,18 @@ export default function EditarAlbumes() {
                         })}
                     </Dropdown.Menu>
                 </Dropdown>
+                </center>
                 <br/>
                 <br/>
+                <div className="d-grid gap-2">
                 <Button variant="primary" onClick={AgregarAlbum}>Agregar album</Button>
-                <Button variant="primary">Modificar album</Button>
-                <Button variant="primary">Eliminar album</Button>
+                <Button variant="primary" onClick={ModificarAlbum}>Modificar album</Button>
+                <Button variant="primary" onClick={EliminarAlbum}>Eliminar album</Button>
+                
                 <br />
                 <br />
-                <Button variant="success" >Ver Fotos</Button>
+                <Button variant="success" href="/VerFotos" >Ver Fotos</Button>
+                </div>
             </div>
         </div>
     )

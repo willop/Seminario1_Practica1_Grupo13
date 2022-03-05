@@ -1,5 +1,5 @@
 import React, { useState , useEffect} from 'react'
-import { Form, Button, Row, Col } from 'react-bootstrap'
+import { Form, Button,Container, Row, Col } from 'react-bootstrap'
 import BarraNavegacion from '../components/BarraNavegacion'
 import '../Style/Home.css'
 import Cookies from 'universal-cookie'
@@ -64,41 +64,34 @@ export function Home() {
 
     return (
         <div>
-            <BarraNavegacion />
+            <BarraNavegacion name={nombre} />
+            <br />
+                <br />
+                <br />
             <div id="id_bodyHome">
                 <div id="id_foto">
+                    <center><h1>Bienvenido {username}</h1>
+                    <br />
+                <br />
                     <img id="foto_id" src={imagenmostrar} />
+                    </center>
                 </div>
-                <div id="id_informacion">
-                    <Form>
-                        <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
-                            <Form.Label column sm="2">
-                                Nombre
-                            </Form.Label>
-                            <Col sm="10">
-                                <Form.Control plaintext readOnly value={nombre} />
-                            </Col>
-                        </Form.Group>
-
-                        <Form.Group as={Row} className="mb-3" controlId="formPlaintextEmail">
-                            <Form.Label column sm="2">
-                                Username
-                            </Form.Label>
-                            <Col sm="10">
-                                <Form.Control plaintext readOnly value={username} />
-                            </Col>
-                        </Form.Group>
-                    </Form>
-                </div>
-
             </div>
+            <br />
+                <br />
+                <br />
             <div id="id_opciones">
-                <br />
-                <Button variant="primary" onClick={cambio} href="/verFoto">Ver Fotos</Button>
-                <br />
-                <Button variant="primary" onClick={cambio} href="/subirFoto" >Subir Foto</Button>
-                <br />
-                <Button variant="primary"  href="/EditarAlbum" >Editar Albumes</Button>
+                <center>
+  
+                <div className="d-grid gap-2">
+                <Button variant="primary" onClick={cambio} size="lg" href="/VerFotos">Ver Fotos</Button>
+                
+                <Button variant="primary" onClick={cambio} size="lg" href="/subirFoto" >Subir Foto</Button>
+                
+                <Button variant="primary"  href="/EditarAlbum" size="lg" >Editar Albumes</Button>
+                </div>
+                </center>
+
             </div>
         </div>
     )

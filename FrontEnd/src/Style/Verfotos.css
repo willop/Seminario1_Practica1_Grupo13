@@ -1,0 +1,13 @@
+ #id_album{
+     display: inline-block;
+ }
+
+#div_poralbum{
+    overflow: scroll;
+    background-color:rgba(145, 160, 160, 0.515);
+    height: 360px;
+    width: 80%;
+    margin-left: 10%;
+    display: inline-block;
+}
+
