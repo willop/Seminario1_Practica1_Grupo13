@@ -300,19 +300,78 @@ def editarAlbunes():
 #API PARA VER FOTOS
 @app.route('/verfotos', methods=['POST'])
 def verFotos():
-    dataJson = {}
+    dataJson = []
+    copia = []
+    copia2 = []
+    contador = 0  
+    contadorAux = 0
+    primero = ""
+    
+    tamanio = 0
+    albumComparar = ""
+
+
+    #cargando credenciales de bucket
+    s3Resource = boto3.resource(
+        's3',
+        aws_access_key_id=key.ACCES_KEY_ID,
+        aws_secret_access_key=key.ACCES_SECRET_KEY,
+        config=Config(signature_version='s3v4')
+    )
+
     try:
         #iniciando conexion con bd
         cursor = conn.cursor()
         #ejecutando procedimiento para validar si usuario existe
         msg = cursor.callproc('VERFOTOS', (request.json['username'],pymssql.output(int),))
+
         for row in cursor:
-            album = []
-            album.append([row[0],row[1]])
+            copia.append(row)
+
+
+        
+
+
+        copia2 = copia
+        # para galar los nombres de los albumens por usuario
+        primero = copia[contador][0]
+        # print("primer valor para comparar: ",primero)
+        tamanio = len(copia)
+        # print(tamanio)
+        # dataJson.append({"album":primer,"fotos":1})
+        # for para album
+        for row2 in copia2:        
+
+            primero = copia[contador][0]
+
+            
+            if(albumComparar!=primero):
+                fotos = []
+                # print("album; ---------->",primero)
+                albumComparar = copia[contador][0]
+                # for anidado para los fotos
+                for photo in copia:
+                    if primero == photo[0]:                    
+                        # print("foto: ",photo[1])
+                        
+                        #descargando imagen desde bucket
+                        s3Resource.Bucket(key.BUCKET_NAME).download_file(photo[1],'./img/descarga.jpg');
+                        # apertura y conversion de imagen
+                        encoded = base64.b64encode(open("img/descarga.jpg", "rb").read())
+                        encoded_string = encoded.decode('utf-8')
+                        # fotos.append(photo[1])
+                        fotos.append(encoded_string)
+
+                dataJson.append({'album':row2[0],'fotos':fotos})  
+            
+            contador+=1         
+               
+
+        
         cursor.close()
     except Exception as e:
         print("Ocurrió un error al obtener las fotos de un usuario: ", e)
-    return dataJson
+    return json.dumps(dataJson)
 
 
 # inicializaicon de la aplicacion
