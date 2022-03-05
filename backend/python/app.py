@@ -35,7 +35,7 @@ def newUser():
     try:
         cursor = conn.cursor()
         #generando la ruta de imagen
-        ruta  = 'fotos/' + str(uuid.uuid4()) + '.jpg'
+        ruta  = 'Fotos_Pefil/' + str(uuid.uuid4()) + '.jpg'
         #ejecutando transaccion de registro
         msg = cursor.callproc('REGISTRO', (request.json['username'],request.json['name'],request.json['password'],ruta,pymssql.output(int),))
         #cargando imagen a bucket s3 si no dio error al validar datos
@@ -116,7 +116,7 @@ def editProfile():
         save = 0;
         #si se necesita cambio de imagen 
         if request.json['cambiarImagen'] == 1 :
-            ruta = nuevaRuta()
+            ruta = nuevaRuta('Fotos_Perfil/')
         #ejecutando procedimiento para validar si usuario existe
             msg = cursor.callproc('EDITARPERFIL', (request.json['username'],request.json['password'],1,request.json['newusername'],request.json['name'],ruta,pymssql.output(int),))
             #si se ejecutan los campos con exito se sube la imagen al bucket
@@ -180,34 +180,63 @@ def loadPhoto():
         #iniciando conexion con bd
         cursor = conn.cursor()
         #proc exec CARGARIMAGEN username, albumname, imagename, imagepath, response
-        ruta = nuevaRuta()
-        #ejecutando procedimiento para validar si usuario existe
-        msg = cursor.callproc('CARGARIMAGEN', (request.json['username'],request.json['album'],request.json['nombrefoto'],ruta,pymssql.output(int),))
-        #si se inserto en bd exitosamente
-        if msg[4] == 1:
-            #convirtiendo a base64
-            img = base64.b64decode(request.json['foto'])
-            buf = io.BytesIO(img)
-            #cargando credenciales bucket
-            client = boto3.client('s3',
-                aws_access_key_id=key.ACCES_KEY_ID,
-                aws_secret_access_key=key.ACCES_SECRET_KEY
-            )
-            #subiendo imagen a bucket
-            client.put_object(Body=img,Bucket='practica1-pruebag13',Key=ruta)
-            save = 1
+        
+
+
+        # condicion de image
+        if request.json['album'] == 'Perfil de Usuario':
+            # genera el id y ruta
+            ruta = nuevaRuta('Fotos_Perfil/')
+            #ejecutando procedimiento para validar si usuario existe
+            msg = cursor.callproc('CARGARIMAGEN', (request.json['username'],request.json['album'],request.json['nombrefoto'],ruta,pymssql.output(int),))
+            #si se inserto en bd exitosamente
+            if msg[4] == 1:
+                #convirtiendo a base64
+                img = base64.b64decode(request.json['foto'])
+                buf = io.BytesIO(img)
+                #cargando credenciales bucket
+                client = boto3.client('s3',
+                    aws_access_key_id=key.ACCES_KEY_ID,
+                    aws_secret_access_key=key.ACCES_SECRET_KEY
+                )
+                #subiendo imagen a bucket
+                client.put_object(Body=img,Bucket='practica1-pruebag13',Key=ruta)
+                save = 1
+            else:
+                save = 0
+            #finalizando conexion con bd
+            cursor.close()
         else:
-            save = 0
-        #finalizando conexion con bd
-        cursor.close()
+            # genera el id y ruta
+            ruta = nuevaRuta('Fotos_Publicadas/')
+            #ejecutando procedimiento para validar si usuario existe
+            msg = cursor.callproc('CARGARIMAGEN', (request.json['username'],request.json['album'],request.json['nombrefoto'],ruta,pymssql.output(int),))
+            #si se inserto en bd exitosamente
+            if msg[4] == 1:
+                #convirtiendo a base64
+                img = base64.b64decode(request.json['foto'])
+                buf = io.BytesIO(img)
+                #cargando credenciales bucket
+                client = boto3.client('s3',
+                    aws_access_key_id=key.ACCES_KEY_ID,
+                    aws_secret_access_key=key.ACCES_SECRET_KEY
+                )
+                #subiendo imagen a bucket
+                client.put_object(Body=img,Bucket='practica1-pruebag13',Key=ruta)
+                save = 1
+            else:
+                save = 0
+            #finalizando conexion con bd
+            cursor.close()
+
     except Exception as e:
         print("Ocurrió un error al realizar el registro: ", e)
 
     return {'respuesta' : save}
 
 #FUNCION QUE GENERA IDS UNICOS PARA IMAGENES
-def nuevaRuta():
-    ruta  = 'fotos/' + str(uuid.uuid4()) + '.jpg'
+def nuevaRuta(rutaGuardado):
+    ruta  = rutaGuardado + str(uuid.uuid4()) + '.jpg'
     return ruta
 
 
