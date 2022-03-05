@@ -33,7 +33,7 @@ const enviarDatos = async(event)=>{
           },
           body: JSON.stringify(datos)
       }
-      let respuesta = await fetch('http://localhost:5000/login', configuracion)
+      let respuesta = await fetch('http://balanceadorpractica1-723187498.us-east-2.elb.amazonaws.com:5000/login', configuracion)
       let json = await respuesta.json();
       console.log('valor de la respuesta json')
       console.log(json)

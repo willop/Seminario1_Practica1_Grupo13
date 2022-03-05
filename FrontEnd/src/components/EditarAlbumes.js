@@ -56,7 +56,7 @@ export default function EditarAlbumes() {
                 },
                 body: JSON.stringify({ "username": username })
             }
-            let respuesta = await fetch('http://localhost:5000/editaralbum', configuracion)
+            let respuesta = await fetch('http://balanceadorpractica1-723187498.us-east-2.elb.amazonaws.com:5000/editaralbum', configuracion)
             let json = await respuesta.json();
             console.log('valor de la respuesta json')
             console.log(json)
@@ -84,7 +84,7 @@ export default function EditarAlbumes() {
                 },
                 body: JSON.stringify(agregar2)
             }
-            let respuesta = await fetch('http://localhost:5000/agregaralbum', configuracion)
+            let respuesta = await fetch('http://balanceadorpractica1-723187498.us-east-2.elb.amazonaws.com:5000/agregaralbum', configuracion)
             let json = await respuesta.json();
             if(json.reponse == 0){
                 alert("No se ha podido agregar el nuevo album")
@@ -113,7 +113,7 @@ export default function EditarAlbumes() {
                 },
                 body: JSON.stringify(agregar)
             }
-            let respuesta = await fetch('http://localhost:5000/modificaralbum', configuracion)
+            let respuesta = await fetch('http://balanceadorpractica1-723187498.us-east-2.elb.amazonaws.com:5000/modificaralbum', configuracion)
             let json = await respuesta.json();
             if(json.reponse == 0){
                 alert("No se ha podido agregar el nuevo album")
@@ -142,7 +142,7 @@ export default function EditarAlbumes() {
                 },
                 body: JSON.stringify(agregar)
             }
-            let respuesta = await fetch('http://localhost:5000/eliminaralbum', configuracion)
+            let respuesta = await fetch('http://balanceadorpractica1-723187498.us-east-2.elb.amazonaws.com:5000/eliminaralbum', configuracion)
             let json = await respuesta.json();
             if(json.reponse == 0){
                 alert("No se ha podido eliminar el album")

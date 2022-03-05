@@ -28,7 +28,7 @@ export function Home() {
                 },
                 body: JSON.stringify({ "username": username })
             }
-            let respuesta = await fetch('http://localhost:5000/home', configuracion)
+            let respuesta = await fetch('http://balanceadorpractica1-723187498.us-east-2.elb.amazonaws.com:5000/home', configuracion)
             let json = await respuesta.json();
             console.log('valor de la respuesta json')
             console.log(json)

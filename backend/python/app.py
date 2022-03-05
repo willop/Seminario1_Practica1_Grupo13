@@ -411,5 +411,7 @@ def verFotos():
 # pip install -U flask-cors
 #pip install -U pip
 #pip install pymssql
+#Se agrego el host 0.0.0.0 para conexion
+
 if __name__ == '__main__':
-    app.run(debug=True,port=4500)
+    app.run(host='0.0.0.0',port=5000)
