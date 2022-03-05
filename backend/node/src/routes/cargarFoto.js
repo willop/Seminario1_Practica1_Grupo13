@@ -6,12 +6,21 @@ const sql = require('mssql')//sql server node
 const con = require('../../database/conection')//conexion bd
 
 router.post('/cargarfoto', async (req, res) => {
-    //generando ruta de foto
-    let ruta = "fotos/" + uuidv4() + ".png"; 
+    
     //variable que valida transaccion
     let r = 0;
     //insercion en bd
     const { username,nombrefoto,album,foto} = req.body;
+
+    let ruta = "";
+
+    if(album == "Perfil de Usuario"){
+        //generando ruta de foto publicada
+        ruta = "Fotos_Perfil/" + uuidv4() + ".png";
+    }else{
+        //generando ruta de foto publicada
+        ruta = "Fotos_Publicadas/" + uuidv4() + ".png"; 
+    }
 
     try {
         const pool = await con;

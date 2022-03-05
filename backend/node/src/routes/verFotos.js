@@ -27,26 +27,6 @@ router.post('/verfotos', async (req, res) => {
     ///AQUI ES DONDE SE TIENE QUE HACER LO DE S3, LA RESPUESTA DE LA CONSULTA VIENE EN resp
     let respuesta = [];
 
-    /*for (const element of resp) {
-        var S3 = new aws.S3();
-
-        aws.config.update({
-            region: process.env.REGION,
-            accessKeyId: process.env.ACCESS_KEY_ID,
-            secretAccessKey: process.env.SECRET_ACCESS_KEY
-        });
-
-        var getParams = {
-            Bucket: process.env.BUCKET_S3,
-            Key: element.path
-        };
-
-        let cadena = await S3.getObject(getParams, function (err, data) {}).promise();
-
-        respuesta.push({album:element.name, foto: Buffer.from(cadena.Body).toString('base64')});
-        
-    }*/
-
     //creando albums
     for (const element of resp) {
         let name = element.name;

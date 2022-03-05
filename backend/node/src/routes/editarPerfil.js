@@ -10,9 +10,9 @@ router.post('/editarPerfil', async (req, res) => {
     //variable que indica estado de transaccion, si se inserto 1. si no se inserto 0
     let r = 0;
     //verificando si es necesario generar nueva ruta
-    let nuevaRuta = "f";
+    let nuevaRuta = "";
     if (cambiarImagen){
-        nuevaRuta = "fotos/" + uuidv4() + ".png";
+        nuevaRuta = "Fotos_Perfil/" + uuidv4() + ".png";
     }
 
     try {

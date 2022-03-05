@@ -10,7 +10,7 @@ router.post('/nuevousuario', async (req, res) => {
     //destructurando valores
     const { username, name, password, foto } = req.body;
     //definiendo ruta de imagen
-    let ruta = "fotos/" + uuidv4() + ".png";
+    let ruta = "Fotos_Perfil/" + uuidv4() + ".png";
     let r = 0;
     try {
         const pool = await con;
