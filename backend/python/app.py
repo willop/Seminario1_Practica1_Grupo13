@@ -323,7 +323,7 @@ def editarAlbunes():
     except Exception as e:
         print("Ocurrió un error al realizar el registro: ", e)
 
-    return json.dumps(ralbum)
+    return {'respuesta' : ralbum}
 
 
 #API PARA VER FOTOS
