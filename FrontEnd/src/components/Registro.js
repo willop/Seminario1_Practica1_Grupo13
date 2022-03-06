@@ -2,11 +2,13 @@ import React, { useState } from 'react'
 import { Form, Button } from 'react-bootstrap'
 import "../Style/Registro.css"
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Swal from 'sweetalert2'
 
 
     
 export default function Registro() {
 
+    const [contra, setcontra]= useState('')
     const [datos, setDatos] = useState({
         username: '',
         name: '',
@@ -27,13 +29,13 @@ export default function Registro() {
 
 
     const filesSelectedHandler = async (event) => {
-        //console.log(event.target.files[0]);
+        ////console.log(event.target.files[0]);
         const filefoto = event.target.files[0];
         const base64 = await convertobase64(filefoto);
         const newbase64 = base64.slice(23)
-        console.log(newbase64)
+        //console.log(newbase64)
         datos.foto = newbase64
-        console.log("Datos ingresados antes de enviar",datos)
+        //console.log("Datos ingresados antes de enviar",datos)
     }
     
 
@@ -57,8 +59,11 @@ export default function Registro() {
     
     const enviarDatos = async (event) => {
 
-        if (datos.password == datos.password2) {
-            console.log(datos)
+        if (datos.password == datos.password2) {            
+            var md5 = require('md5');
+            var nuevacontra = md5(datos.password)
+            datos.password = nuevacontra
+            //console.log(datos)
             try {
                 let configuracion = {
                     method: 'POST',
@@ -70,10 +75,25 @@ export default function Registro() {
                 }
                 let respuesta = await fetch('http://balanceadorpractica1-723187498.us-east-2.elb.amazonaws.com:5000/nuevousuario', configuracion)
                 let json = await respuesta.json();
-                console.log('valor de la respuesta json')
-                console.log(json)
-                //validacion si es true o false
-                //realizar la redireccion de pagina
+                //console.log('valor de la respuesta json')
+                //console.log(json)
+                if(json.respuesta == 0){
+                    await Swal.fire({
+                        position: 'top-center',
+                        icon: 'error',
+                        title: 'No se ha podido agregar al usuario',
+                        button: "Aceptar"
+                      })
+                }
+                else{
+                    await Swal.fire({
+                        position: 'top-center',
+                        icon: 'success',
+                        title: 'Usuario creado exitosamente',
+                        button: "Aceptar"
+                      })
+                    window.location.href = "/";
+                }
             } catch (error) {
             }
         }

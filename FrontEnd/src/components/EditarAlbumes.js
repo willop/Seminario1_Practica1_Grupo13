@@ -4,6 +4,7 @@ import BarraNavegacion from '../components/BarraNavegacion'
 import AlbumComponent from './album/AlbumComponent'
 import Cookies from 'universal-cookie'
 import '../Style/EditarAlbumes.css'
+import Swal from 'sweetalert2'
 
 export default function EditarAlbumes() {
 
@@ -58,11 +59,11 @@ export default function EditarAlbumes() {
             }
             let respuesta = await fetch('http://balanceadorpractica1-723187498.us-east-2.elb.amazonaws.com:5000/editaralbum', configuracion)
             let json = await respuesta.json();
-            console.log('valor de la respuesta json')
-            console.log(json)
-            console.log("mostrando el vector de respuesta:\n", json.respuesta)
+            //console.log('valor de la respuesta json')
+            //console.log(json)
+            //console.log("mostrando el vector de respuesta:\n", json.respuesta)
             setalbumes(json.respuesta)
-            console.log("Mostrando los albumes almacenados",albumes)
+            //console.log("Mostrando los albumes almacenados",albumes)
         } catch (error) {
         }
     }
@@ -72,10 +73,10 @@ export default function EditarAlbumes() {
                                     AGREGAR ALBUM 
     ----------------------------------------------------------------------------*/
     const AgregarAlbum = async (event) => {
-        console.log(agregar2)
+        //console.log(agregar2)
         try {
-            console.log("Datos agregar: ")
-            console.log(agregar2)
+            //console.log("Datos agregar: ")
+            //console.log(agregar2)
             let configuracion = {
                 method: 'POST',
                 headers: {
@@ -87,11 +88,21 @@ export default function EditarAlbumes() {
             let respuesta = await fetch('http://balanceadorpractica1-723187498.us-east-2.elb.amazonaws.com:5000/agregaralbum', configuracion)
             let json = await respuesta.json();
             if(json.reponse == 0){
-                alert("No se ha podido agregar el nuevo album")
-                window.location.href = "/home";
+                await Swal.fire({
+                    position: 'top-center',
+                    icon: 'error',
+                    title: 'No se pudo agregar un nuevo album',
+                    button: "Aceptar"
+                  })
+                
             }
             else{
-                alert("Nuevo album creado con exito")
+                await Swal.fire({
+                    position: 'top-center',
+                    icon: 'success',
+                    title: 'Album creado con exito',
+                    button: "Aceptar"
+                  })
                 window.location.href = "/home";
             }
         } catch (error) {
@@ -103,8 +114,8 @@ export default function EditarAlbumes() {
     ----------------------------------------------------------------------------*/
     const ModificarAlbum = async (event) => {
         try {
-            console.log("Datos agregar: ")
-            console.log(agregar)
+            //console.log("Datos agregar: ")
+            //console.log(agregar)
             let configuracion = {
                 method: 'POST',
                 headers: {
@@ -116,11 +127,21 @@ export default function EditarAlbumes() {
             let respuesta = await fetch('http://balanceadorpractica1-723187498.us-east-2.elb.amazonaws.com:5000/modificaralbum', configuracion)
             let json = await respuesta.json();
             if(json.reponse == 0){
-                alert("No se ha podido agregar el nuevo album")
-                window.location.href = "/home";
+                await Swal.fire({
+                    position: 'top-center',
+                    icon: 'error',
+                    title: 'No se pudo modificar el album',
+                    button: "Aceptar"
+                  })
+                
             }
             else{
-                alert("Nuevo album creado con exito")
+                await Swal.fire({
+                    position: 'top-center',
+                    icon: 'success',
+                    title: 'Album modificado con exito',
+                    button: "Aceptar"
+                  })
                 window.location.href = "/home";
             }
         } catch (error) {
@@ -132,8 +153,8 @@ export default function EditarAlbumes() {
     ----------------------------------------------------------------------------*/
     const EliminarAlbum = async (event) => {
         try {
-            console.log("Datos agregar: ")
-            console.log(agregar)
+            //console.log("Datos agregar: ")
+            //console.log(agregar)
             let configuracion = {
                 method: 'POST',
                 headers: {
@@ -145,10 +166,21 @@ export default function EditarAlbumes() {
             let respuesta = await fetch('http://balanceadorpractica1-723187498.us-east-2.elb.amazonaws.com:5000/eliminaralbum', configuracion)
             let json = await respuesta.json();
             if(json.reponse == 0){
-                alert("No se ha podido eliminar el album")
+                await Swal.fire({
+                    position: 'top-center',
+                    icon: 'error',
+                    title: 'No se pudo eliminar el album',
+                    button: "Aceptar"
+                  })
+                
             }
             else{
-                alert("Eliminacion exitosa")
+                await Swal.fire({
+                    position: 'top-center',
+                    icon: 'success',
+                    title: 'Album eliminado con exito',
+                    button: "Aceptar"
+                  })
                 window.location.href = "/home";
             }
         } catch (error) {
@@ -158,13 +190,13 @@ export default function EditarAlbumes() {
 
 
     const handlenamechange = (e) => {
-        console.log("Seleccionado: "+e.target.name)
+        //console.log("Seleccionado: "+e.target.name)
         agregar.album = e.target.name
         setnombrealbum(e.target.name)
         //setnombrealbum(e.target.name)
-        console.log("cambio de valor combobox")
-        console.log(agregar)
-        console.log("modificado: ",albummodifica)
+        //console.log("cambio de valor combobox")
+        //console.log(agregar)
+        //console.log("modificado: ",albummodifica)
     }
 
 
@@ -174,15 +206,15 @@ export default function EditarAlbumes() {
             ...agregar,
             [evt.target.name]: value
         });
-        console.log("Cambio de valor textbox")
+        //console.log("Cambio de valor textbox")
         agregar2.album = value;
         agregar.newalbumname = value;
-        console.log(agregar)
+        //console.log(agregar)
     }
     
 
     useEffect(function () {
-        console.log("Hola al iniciar la app")
+        //console.log("Hola al iniciar la app")
         if (estadopag == false) {
             InicioDatos()
             setestadopag(true)

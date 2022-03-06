@@ -18,7 +18,7 @@ export function Home() {
 
 
     const InicioDatos = async (event) => {
-        console.log("dentro de la app")
+        //console.log("dentro de la app")
         try {
             let configuracion = {
                 method: 'POST',
@@ -30,11 +30,11 @@ export function Home() {
             }
             let respuesta = await fetch('http://balanceadorpractica1-723187498.us-east-2.elb.amazonaws.com:5000/home', configuracion)
             let json = await respuesta.json();
-            console.log('valor de la respuesta json')
-            console.log(json)
-            setimg("data:image/png;base64, " + json.foto)
+            //console.log('valor de la respuesta json')
+            //console.log(json)
+            setimg("data:image/jpg;base64, " + json.foto)
             setnombre(json.name)
-            const valimg = "data:image/png;base64, " + json.foto
+            const valimg = "data:image/jpg;base64, " + json.foto
             const valname = json.name
             setnombre(json.name)
             cookies.set('cookienombre',valname,{path: '/'})
@@ -45,12 +45,12 @@ export function Home() {
 
     function cambio() {
         setnombre("nuevo nombre")
-        //console.log(nombre)
+        ////console.log(nombre)
         setusername("nuevo username")
     }
 
     useEffect(function () {
-        console.log("Hola al iniciar la app")
+        //console.log("Hola al iniciar la app")
         if (estadopag == false) {
             InicioDatos()
             setestadopag(true)

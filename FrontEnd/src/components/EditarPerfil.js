@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Form, Button, Row, Col, Navbar, Nav, NavDropdown, Container } from 'react-bootstrap'
 import BarraNavegacion from '../components/BarraNavegacion'
 import '../Style/EditarPerfil.css'
+import Swal from 'sweetalert2'
 import Cookies from 'universal-cookie'
 
 
@@ -28,16 +29,16 @@ export default function EditarPerfil() {
 
 
     const filesSelectedHandler = async (event) => {
-        //console.log(event.target.files[0]);
+        ////console.log(event.target.files[0]);
         const filefoto = event.target.files[0];
         const base64 = await convertobase64(filefoto);
         const newbase64 = base64.slice(23)
-        console.log(newbase64)
+        //console.log(newbase64)
         datos.foto = newbase64
         datos.cambiarImagen = 1;
-        console.log(datos.username)
-        console.log(datos.foto)
-        console.log(datos.cambiarImagen)
+        //console.log(datos.username)
+        //console.log(datos.foto)
+        //console.log(datos.cambiarImagen)
 
 
     }
@@ -58,7 +59,10 @@ export default function EditarPerfil() {
     }
 
     const enviarDatos = async (event) => {
-            console.log(datos)
+        var md5 = require('md5');
+        var nuevacontra = md5(datos.password)
+        datos.password = nuevacontra
+        //console.log(datos)
             try {
                 let configuracion = {
                     method: 'POST',
@@ -70,15 +74,26 @@ export default function EditarPerfil() {
                 }
                 let respuesta = await fetch('http://balanceadorpractica1-723187498.us-east-2.elb.amazonaws.com:5000/editarPerfil', configuracion)
                 let json = await respuesta.json();
-                console.log('valor de la respuesta json')
-                console.log(json)
+                //console.log('valor de la respuesta json')
+                //console.log(json)
                 let resp = json.respuesta
-                if (resp == 1) {
-                    //si es true redirect
-                    window.location.href = "/home";
+                if(resp == 0){
+                    await Swal.fire({
+                        position: 'top-center',
+                        icon: 'error',
+                        title: 'No se pudo editar el perfil',
+                        button: "Aceptar"
+                      })
+                    
                 }
-                else {
-                    alert("El usuario no se ha podido crear")
+                else{
+                    await Swal.fire({
+                        position: 'top-center',
+                        icon: 'success',
+                        title: 'Usuario editado con exito',
+                        button: "Aceptar"
+                      })
+                    window.location.href = "/home";
                 }
             } catch (error) {
             }

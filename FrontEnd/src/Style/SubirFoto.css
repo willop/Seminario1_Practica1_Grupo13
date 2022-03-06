@@ -1,8 +1,11 @@
 #id_contenedor{ 
     width: 60%;
+    display: inline-block;
+    align-items: center;
 }
 
 #imagen_update{
     width: 300px;
     height:auto;
+    align-items: center;
 }

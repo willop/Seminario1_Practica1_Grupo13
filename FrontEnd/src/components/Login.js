@@ -3,6 +3,7 @@ import {Form, Button} from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "../Style/Login.css"
 import Cookies from 'universal-cookie'
+import Swal from 'sweetalert2'
 //import Cookies from 'universal-cookie';
 
 export default function Login() {
@@ -19,11 +20,15 @@ export default function Login() {
     ...datos,
     [evt.target.name]: value
   });
-    //console.log(datos.username)
-    //console.log(datos.password)
+    ////.log(datos.username)
+    ////.log(datos.password)
 }
 
 const enviarDatos = async(event)=>{
+  var md5 = require('md5');
+  var nuevacontra = md5(datos.password)
+  datos.password = nuevacontra
+  //.log(datos)
   try {
       let configuracion = {
           method: 'POST',
@@ -35,19 +40,22 @@ const enviarDatos = async(event)=>{
       }
       let respuesta = await fetch('http://balanceadorpractica1-723187498.us-east-2.elb.amazonaws.com:5000/login', configuracion)
       let json = await respuesta.json();
-      console.log('valor de la respuesta json')
-      console.log(json)
+      //.log('valor de la respuesta json')
+      //.log(json)
       let resp = json.respuesta
       if(resp == 1){
         //si es true redirect
         const cookies = new Cookies();
         cookies.set('cookieusername',datos.username,{path:'/'});
-        cookies.set('cookiepassword',datos.password,{path:'/'});
-
         window.location.href = "/home";
       }
       else{
-        alert("Credenciales incorrectas")
+        await Swal.fire({
+          position: 'top-center',
+          icon: 'error',
+          title: 'Usuario o contraseña invalidos',
+          button: "Aceptar"
+        })
       }
       //validacion si es true  o false
       //realizar la redireccion de pagina

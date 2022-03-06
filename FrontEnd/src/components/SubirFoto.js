@@ -5,6 +5,7 @@ import '../Style/SubirFoto.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import AlbumComponent from './album/AlbumComponent'
 import Cookies from 'universal-cookie'
+import Swal from 'sweetalert2'
 
 
 export default function SubirFoto() {
@@ -35,13 +36,13 @@ export default function SubirFoto() {
     ]
 
     const filesSelectedHandler = async (event) => {
-        //console.log(event.target.files[0]);
+        ////console.log(event.target.files[0]);
         const filefoto = event.target.files[0];
         const base64 = await convertobase64(filefoto);
         const newbase64 = base64.slice(23)
-        //console.log(base64)
+        ////console.log(base64)
         enviar.foto = newbase64;
-        console.log(enviar)
+        //console.log(enviar)
         setimg(URL.createObjectURL(event.target.files[0]))
     }
 
@@ -56,14 +57,14 @@ export default function SubirFoto() {
 
 
     const handlenamechange = (e) => {
-        console.log("Seleccionado: "+e.target.name)
+        ////console.log("Seleccionado: "+e.target.name)
         enviar.album = e.target.name
         setnombrealbum(e.target.name)
-        console.log(enviar)
+        //console.log(enviar)
     }
 
     const enviarDatos = async (event) => {
-        console.log(enviar)
+        //console.log(enviar)
         try {
             let configuracion = {
                 method: 'POST',
@@ -73,16 +74,26 @@ export default function SubirFoto() {
                 },
                 body: JSON.stringify(enviar)
             }
-            let respuesta = await fetch('http://localhost:5000/cargarfoto', configuracion)
+            let respuesta = await fetch('http://balanceadorpractica1-723187498.us-east-2.elb.amazonaws.com:5000/cargarfoto', configuracion)
             let json = await respuesta.json();
-            console.log('valor de la respuesta json')
-            console.log(json)
+            //console.log('valor de la respuesta json')
+            //console.log(json)
             if(json.respuesta == 0){
-                alert("No se ha podido agregar la nueva foto")
+                await Swal.fire({
+                    position: 'top-center',
+                    icon: 'error',
+                    title: 'Error al subir una nuevo foto',
+                    button: "Aceptar"
+                  })
                 window.location.href = "/home";
             }
             else{
-                alert("Nueva imagen agregada con exito")
+                await Swal.fire({
+                    position: 'top-center',
+                    icon: 'success',
+                    title: 'Foto subida exitosamente',
+                    button: "Aceptar"
+                  })
                 window.location.href = "/home";
             }
             //validacion si es true o false
@@ -104,10 +115,10 @@ export default function SubirFoto() {
             }
             let respuesta = await fetch('http://balanceadorpractica1-723187498.us-east-2.elb.amazonaws.com:5000/subirfoto', configuracion)
             let json = await respuesta.json();
-            console.log('valor de la respuesta json')
-            console.log(json)
+            //console.log('valor de la respuesta json')
+            //console.log(json)
             seralbums(json.respuesta)
-            console.log("Mostrando los albumes almacenados",albumes)
+            //console.log("Mostrando los albumes almacenados",albumes)
 
         } catch (error) {
         }
@@ -132,7 +143,7 @@ export default function SubirFoto() {
 
 
     useEffect(function () {
-        console.log("Hola al iniciar la app")
+        //console.log("Hola al iniciar la app")
         if (estadopag == false) {
             InicioDatos()
             setestadopag(true)
@@ -147,23 +158,24 @@ export default function SubirFoto() {
     return (
         <div>
             <BarraNavegacion />
-            <center>
                 <div id="id_contenedor">
+                    <center>
                     <img src={img} id="imagen"/>
+                    </center>   
                     <br/>
                     <br/>
                     <br/>
                     <Form.Group className="mb-3">
-                        <h4>Agregar foto</h4>
+                        <center><h4>Agregar foto</h4></center>
                         <Form.Control type="file" onChange={filesSelectedHandler} name="foto" multiple />
                     </Form.Group>
                     <br />
                     <Form.Group className="mb-3">
-                        <h4>Nombre de la fotografia</h4>
+                        <center><h4>Nombre de la fotografia</h4></center>
                         <Form.Control type="text" onChange={handleuserchange} name="nombrefoto" multiple />
                     </Form.Group>
                     <br />
-
+                    <center>
                     <Dropdown className="d-inline mx-2" onClick={handlenamechange} >
                         <Dropdown.Toggle id="dropdown-autoclose-true">
                             {nombrealbum}
@@ -177,11 +189,12 @@ export default function SubirFoto() {
 
                         </Dropdown.Menu>
                     </Dropdown>
+                    
                     <br />
                     <br />
                     <Button variant="success" onClick={enviarDatos}>Agregar fotografia</Button>
-                </div>
-            </center>
+                    </center>
+                </div>  
         </div>
     )
 }

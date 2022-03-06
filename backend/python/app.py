@@ -35,7 +35,7 @@ def newUser():
     try:
         cursor = conn.cursor()
         #generando la ruta de imagen
-        ruta  = 'Fotos_Pefil/' + str(uuid.uuid4()) + '.jpg'
+        ruta  = 'Fotos_Perfil/' + str(uuid.uuid4()) + '.jpg'
         #ejecutando transaccion de registro
         msg = cursor.callproc('REGISTRO', (request.json['username'],request.json['name'],request.json['password'],ruta,pymssql.output(int),))
         #cargando imagen a bucket s3 si no dio error al validar datos
@@ -323,7 +323,7 @@ def editarAlbunes():
     except Exception as e:
         print("Ocurrió un error al realizar el registro: ", e)
 
-    return {'albums' : ralbum}
+    return {'respuesta' : ralbum}
 
 
 #API PARA VER FOTOS

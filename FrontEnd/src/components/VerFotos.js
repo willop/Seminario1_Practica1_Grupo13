@@ -21,21 +21,14 @@ export default function VerFotos() {
       "album": "nombre album11",
       "fotos":
         [
-          "https://mdbcdn.b-cdn.net/img/Photos/Thumbnails/Slides/1.webp",
-          "https://mdbcdn.b-cdn.net/img/Photos/Thumbnails/Slides/2.webp"
+          
         ]
     },
     {
       "album": "nombre album22",
       "fotos":
         [
-          "https://mdbcdn.b-cdn.net/img/Photos/Thumbnails/Slides/3.webp",
-          "https://mdbcdn.b-cdn.net/img/Photos/Thumbnails/Slides/4.webp",
-          "https://mdbcdn.b-cdn.net/img/Photos/Thumbnails/Slides/3.webp",
-          "https://mdbcdn.b-cdn.net/img/Photos/Thumbnails/Slides/4.webp",
-          "https://mdbcdn.b-cdn.net/img/Photos/Thumbnails/Slides/3.webp",
-          "https://mdbcdn.b-cdn.net/img/Photos/Thumbnails/Slides/4.webp",
-          "https://mdbcdn.b-cdn.net/img/Photos/Thumbnails/Slides/1.webp"
+          
         ]
     }
 
@@ -59,18 +52,18 @@ export default function VerFotos() {
         }
         let respuesta = await fetch('http://balanceadorpractica1-723187498.us-east-2.elb.amazonaws.com:5000/verfotos', configuracion)
         let json = await respuesta.json();
-        console.log('valor de la respuesta json')
-        console.log(json)
-        console.log("mostrando el vector de respuesta:\n", json)
+        //console.log('valor de la respuesta json')
+        //console.log(json)
+        //console.log("mostrando el vector de respuesta:\n", json)
         setcontrolabum(json)
-        console.log("Mostrando los albumes almacenados",controlabum)
+        //console.log("Mostrando los albumes almacenados",controlabum)
     } catch (error) {
     }
 }
 
 
   useEffect(function () {
-    console.log("Hola al iniciar la app")
+    //console.log("Hola al iniciar la app")
     if (estadopag == false) {
       InicioDatos()
       setestadopag(true)
