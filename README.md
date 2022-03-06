@@ -56,5 +56,5 @@
 * Subir Foto
     <img src="images/subirFoto.png">
 * Ver Foto
-    <img src="images/verFoto.png">
+    <img src="images/verFotos.png">
 
