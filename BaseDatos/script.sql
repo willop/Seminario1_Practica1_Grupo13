@@ -13,7 +13,7 @@ go
         idUser int identity constraint usuario_pk primary key,
         username nvarchar(20) not null,
         name nvarchar(max) not null,
-        password nvarchar(16) not null
+        password nvarchar(max) not null
     )
 go
     create table seminario1.album (

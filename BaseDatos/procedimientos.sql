@@ -4,7 +4,7 @@
 CREATE PROC REGISTRO
     @username nvarchar(20),
     @name nvarchar(max),
-    @password nvarchar(16),
+    @password nvarchar(max),
     @path nvarchar(max),
     @response int output
 AS
@@ -67,7 +67,7 @@ BEGIN TRAN
 ----------------------------------------------------------------------------------
 CREATE PROC LOGIN
     @username nvarchar(20),
-    @password nvarchar(16),
+    @password nvarchar(max),
     @response int output
 AS
 BEGIN TRAN
@@ -77,7 +77,7 @@ BEGIN TRAN
             -- USUARIO -----------------------------------------------------------------------
             ----------------------------------------------------------------------------------
             -- verifico que el usuario exista
-            declare @pass nvarchar(16)
+            declare @pass nvarchar(max)
             select @pass = password from seminario1.usuario where username = @username
             if @pass is null
             begin
@@ -167,7 +167,7 @@ BEGIN TRAN
 ----------------------------------------------------------------------------------
 CREATE PROC EDITARPERFIL
     @username nvarchar(20),
-    @password nvarchar(16),
+    @password nvarchar(max),
     @changeimage int,
     @newusername nvarchar(20),
     @newname nvarchar(max),
@@ -181,7 +181,7 @@ BEGIN TRAN
             -- USUARIO -----------------------------------------------------------------------
             ----------------------------------------------------------------------------------
             -- verifico que el usuario exista
-            declare @pass nvarchar(16)
+            declare @pass nvarchar(max)
             select @pass = password from seminario1.usuario where username = @username
             if @pass is null
             begin
