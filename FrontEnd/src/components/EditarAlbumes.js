@@ -32,13 +32,18 @@ export default function EditarAlbumes() {
     ]
     )
 
-    const [agregar, setagregar] = useState({
+    const [agregareditar, setagregar] = useState({
         username: cookies.get('cookieusername'),
         albumname: 'album quemado',
         newalbumname: ''
     })
 
-    const [agregar2, setagregar2] = useState({
+    const [agregar, setagregar2] = useState({
+        username: cookies.get('cookieusername'),
+        album: 'album quemado',
+    })
+
+    const [agregareliminar, setagregareliminar] = useState({
         username: cookies.get('cookieusername'),
         album: 'album quemado',
     })
@@ -73,7 +78,7 @@ export default function EditarAlbumes() {
                                     AGREGAR ALBUM 
     ----------------------------------------------------------------------------*/
     const AgregarAlbum = async (event) => {
-        //console.log(agregar2)
+        console.log(agregar)
         try {
             //console.log("Datos agregar: ")
             //console.log(agregar2)
@@ -83,7 +88,7 @@ export default function EditarAlbumes() {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(agregar2)
+                body: JSON.stringify(agregar)
             }
             let respuesta = await fetch('http://balanceadorpractica1-723187498.us-east-2.elb.amazonaws.com:5000/agregaralbum', configuracion)
             let json = await respuesta.json();
@@ -114,15 +119,16 @@ export default function EditarAlbumes() {
     ----------------------------------------------------------------------------*/
     const ModificarAlbum = async (event) => {
         try {
-            //console.log("Datos agregar: ")
-            //console.log(agregar)
+
+            console.log("Datos agregar: ")
+            console.log(agregar)
             let configuracion = {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(agregar)
+                body: JSON.stringify(agregareditar)
             }
             let respuesta = await fetch('http://balanceadorpractica1-723187498.us-east-2.elb.amazonaws.com:5000/modificaralbum', configuracion)
             let json = await respuesta.json();
@@ -154,14 +160,14 @@ export default function EditarAlbumes() {
     const EliminarAlbum = async (event) => {
         try {
             //console.log("Datos agregar: ")
-            //console.log(agregar)
+            console.log(agregar)
             let configuracion = {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(agregar)
+                body: JSON.stringify(agregareliminar)
             }
             let respuesta = await fetch('http://balanceadorpractica1-723187498.us-east-2.elb.amazonaws.com:5000/eliminaralbum', configuracion)
             let json = await respuesta.json();
@@ -191,9 +197,10 @@ export default function EditarAlbumes() {
 
     const handlenamechange = (e) => {
         //console.log("Seleccionado: "+e.target.name)
-        agregar.album = e.target.name
-        setnombrealbum(e.target.name)
+        agregareditar.albumname = e.target.name
+        agregareliminar.album = e.target.name
         //setnombrealbum(e.target.name)
+        setnombrealbum(e.target.name)
         //console.log("cambio de valor combobox")
         //console.log(agregar)
         //console.log("modificado: ",albummodifica)
@@ -202,13 +209,15 @@ export default function EditarAlbumes() {
 
     const handleuserchange = (evt) => {
         const value = evt.target.value;
-        setagregar({
+        /*setagregar({
             ...agregar,
             [evt.target.name]: value
-        });
+        });*/
+        agregar.album = value
+        agregareditar.newalbumname = value
         //console.log("Cambio de valor textbox")
-        agregar2.album = value;
-        agregar.newalbumname = value;
+        //agregar2.newalbumname = value;
+        //agregar.newalbumname = value;
         //console.log(agregar)
     }
     

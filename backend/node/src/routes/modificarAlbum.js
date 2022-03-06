@@ -12,7 +12,7 @@ router.post('/modificaralbum', async (req, res) => {
         const pool = await con;
         const result = await pool.request()
             .input('username', username)
-            .input('albumname', album)
+            .input('albumname', albumname)
             .input('newalbumname', newalbumname)
             .output('response', sql.Int)
             .execute(`MODIFICARALBUM`);
