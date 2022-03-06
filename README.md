@@ -15,7 +15,7 @@
 <img src="images/arquitectura.png">
 
 * Load Balancer
-    <br>
+    <br>Se implementó un servicio Classic Load Balancer el cual se hace el balanceo de carga hacia las instancias, ec2, en las que se encuentra alojados los servicios del backend de nodejs y python. 
 * EC2
     <br>Fueron utilizadas para realizar los servidores del backend, en los cuales uno fue implementado en NodeJS y el otro en python.   
 * Bucket Imagenes
