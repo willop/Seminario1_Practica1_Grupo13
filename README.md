@@ -10,6 +10,9 @@
 | 3 | Wilfred Stewart Perez Solorzano             | 201408419 |
 | 4 | Hector Josue Orozco Salazar                 | 201314296 |
 
+## Link de la pagina
+http://practica1-g13-paginaweb.s3-website.us-east-2.amazonaws.com/
+
 # Arquitectura
 
 <img src="images/arquitectura.png">
