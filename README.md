@@ -32,14 +32,30 @@
     <br>Se utilizó una base de datos tradicional RDS con un servidor SQL Server en el cual se diseñó un modelo relacional y se crearon procedimientos almacenados en los que se realizaron transacciones para el manejo de los datos.
 
 # Usuarios IAM
+* Usuario S3
+Se creo un usuario con permisos de acceso a S3 para la gestion del Bucket en donde se encuentran las imagenes y paginas web, perteneciente al gurpo practica1-G13-S3.
+El permiso utilizado para este usuario es: AmazonS3FullAcces
+<img src="images/IAM1Imagenes.png">
+
+* Usuario ec2
+Se creo un usuario con permisos de acceso a ec2 con la cual se gestiono cada una de las vpc en las que se encuentran alojando los servidores de nodejs y python correspondientes, perteneciente al gurpo practica1-G13-S3.
+El permiso utilizado para este usuario es: AmazonEC2FullAcces
+<img src="images/IAM2Imagenes.png">
 
 # Bucket S3
 
 <img src="images/bucketImagenes.png">
 
 # EC2
+* Instancia utilizada para montaje del servidor de nodejs.
+<img src="images/ec2nodejs.png">
+* Instancia utilizada para montaje del servidor de python.
+<img src="images/ec2python.png">
 
 # RDS
+Se creo un usuario con permisos de acceso a la base de datos relacional utilizando la base de datos de SQLserver, perteneciente al gurpo practica1-G13-S3.
+El permiso utilizado para este usuario es: AmazonRDSFullAccess
+<img src="images/rdsImagenes.png">
 
 # Aplicacion Web
 
