@@ -19,7 +19,7 @@ router.post('/agregaralbum', async (req, res) => {
     } catch (error) {
         r = 0;
     }
-    res.json({respuesta: r});
+    res.json({reponse: r});
 });
 
 module.exports = router;
