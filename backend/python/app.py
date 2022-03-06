@@ -26,8 +26,9 @@ def addImage():
         aws_access_key_id=key.ACCES_KEY_ID,
         aws_secret_access_key=key.ACCES_SECRET_KEY
     )
-    client.put_object(Body=img,Bucket='practica1-pruebag13',Key='fotos/prueba2.jpg')
+    client.put_object(Body=img,Bucket=key.BUCKET_NAME,Key='fotos/prueba2.jpg')
     return 'ok'
+
 
 #API REGISTRO DE USUARIOS
 @app.route('/nuevousuario',methods=['POST'])
@@ -48,13 +49,14 @@ def newUser():
                 aws_secret_access_key=key.ACCES_SECRET_KEY
             )
             #subiendo imagen al bucket
-            client.put_object(Body=img,Bucket='practica1-pruebag13',Key=ruta)
+            client.put_object(Body=img,Bucket=key.BUCKET_NAME,Key=ruta)
         #finalizando conexion a bd
         cursor.close()
     except Exception as e:
         print("Ocurrió un error al realizar el registro: ", e)
 
     return {'respuesta' : msg[4]}
+
 
 #API LOGIN
 @app.route('/login',methods=['POST'])
@@ -70,6 +72,7 @@ def newSession():
         print("Ocurrió un error al realizar el registro: ", e)
 
     return {'respuesta' : msg[2]}
+
 
 #API HOME
 @app.route('/home', methods=['POST'])
@@ -105,6 +108,7 @@ def getImage():
 
     return jsonRespuesta
 
+
 #API EDITAR EL PERFIL
 @app.route('/editarPerfil', methods=['POST'])
 def editProfile():
@@ -130,7 +134,7 @@ def editProfile():
                     aws_secret_access_key=key.ACCES_SECRET_KEY
                 )
                 #subiendo imagen a bucket
-                client.put_object(Body=img,Bucket='practica1-pruebag13',Key=ruta)
+                client.put_object(Body=img,Bucket=key.BUCKET_NAME,Key=ruta)
                 #respuesta para frontend, si se guardo con exito
                 save = 1
             else:
@@ -152,6 +156,7 @@ def editProfile():
 
     return {'respuesta' : save}
 
+
 #API QUE RETORNA INFORMACION PARA PANTALLA INICIAL DE CARGAR UNA FOTO
 @app.route('/subirfoto',methods=['POST'])
 def uploadPhoto():
@@ -170,7 +175,8 @@ def uploadPhoto():
     except Exception as e:
         print("Ocurrió un error al realizar el registro: ", e)
 
-    return {'albums' : album}
+    return {'respuesta' : album}
+
 
 #API QUE CARGA UNA FOTO AL ALBUM ESPECIFICADO
 @app.route('/cargarfoto',methods=['POST'])
@@ -181,8 +187,6 @@ def loadPhoto():
         cursor = conn.cursor()
         #proc exec CARGARIMAGEN username, albumname, imagename, imagepath, response
         
-
-
         # condicion de image
         if request.json['album'] == 'Perfil de Usuario':
             # genera el id y ruta
@@ -200,7 +204,7 @@ def loadPhoto():
                     aws_secret_access_key=key.ACCES_SECRET_KEY
                 )
                 #subiendo imagen a bucket
-                client.put_object(Body=img,Bucket='practica1-pruebag13',Key=ruta)
+                client.put_object(Body=img,Bucket=key.BUCKET_NAME,Key=ruta)
                 save = 1
             else:
                 save = 0
@@ -222,7 +226,7 @@ def loadPhoto():
                     aws_secret_access_key=key.ACCES_SECRET_KEY
                 )
                 #subiendo imagen a bucket
-                client.put_object(Body=img,Bucket='practica1-pruebag13',Key=ruta)
+                client.put_object(Body=img,Bucket=key.BUCKET_NAME,Key=ruta)
                 save = 1
             else:
                 save = 0
@@ -238,7 +242,6 @@ def loadPhoto():
 def nuevaRuta(rutaGuardado):
     ruta  = rutaGuardado + str(uuid.uuid4()) + '.jpg'
     return ruta
-
 
 
 # API PARA LA CRECION DE UN ARBOL
@@ -262,7 +265,6 @@ def addAlbum():
     return {'reponse':answer}
 
 
-
 # API PARA LA ELIMINACION DE ALBUM
 @app.route('/eliminaralbum',methods=['POST'])
 def deleteAlbum():
@@ -281,7 +283,7 @@ def deleteAlbum():
     except Exception as e:
         print("Ocurrió un error al realizar el registro: ", e)
 
-    return {'response':answer}
+    return {'reponse':answer}
 
 
 # API PARA MODIFICAR UN ALMBUM
@@ -294,11 +296,7 @@ def editAlbum():
         cursor = conn.cursor()
         msg = cursor.callproc('MODIFICARALBUM', (request.json['username'],request.json['albumname'],request.json['newalbumname'],pymssql.output(int),))  
         # comparacion de la respuesta de la bd
-        print(msg)
-        if msg[3]:
-            answer = 1
-        else:
-            answer = 0
+        answer = msg[3]
         cursor.close()
     except Exception as e:
         print("Ocurrió un error al realizar el registro: ", e)
@@ -356,10 +354,6 @@ def verFotos():
 
         for row in cursor:
             copia.append(row)
-
-
-        
-
 
         copia2 = copia
         # para galar los nombres de los albumens por usuario
