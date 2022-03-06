@@ -56,6 +56,7 @@ El permiso utilizado para este usuario es: AmazonEC2FullAcces
 Se creo un usuario con permisos de acceso a la base de datos relacional utilizando la base de datos de SQLserver, perteneciente al gurpo practica1-G13-S3.
 El permiso utilizado para este usuario es: AmazonRDSFullAccess
 <img src="images/rdsImagenes.png">
+<img src="images/modeloRelacional.png">
 
 # Aplicacion Web
 
