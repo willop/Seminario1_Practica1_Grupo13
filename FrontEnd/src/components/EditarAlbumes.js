@@ -34,7 +34,7 @@ export default function EditarAlbumes() {
 
     const [agregar, setagregar] = useState({
         username: cookies.get('cookieusername'),
-        album: 'album quemado',
+        albumname: 'album quemado',
         newalbumname: ''
     })
 

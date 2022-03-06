@@ -8,7 +8,7 @@ const con = require('../../database/conection')//conexion bd
 router.post('/modificaralbum', async (req, res) => {
     let r = 0;
     try {
-        const {username,album,newalbumname} = req.body;
+        const {username,albumname,newalbumname} = req.body;
         const pool = await con;
         const result = await pool.request()
             .input('username', username)

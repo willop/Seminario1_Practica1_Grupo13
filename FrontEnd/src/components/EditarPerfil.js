@@ -93,6 +93,7 @@ export default function EditarPerfil() {
                         title: 'Usuario editado con exito',
                         button: "Aceptar"
                       })
+                      cookies.set('cookieusername',datos.newusername,{path:'/'});
                     window.location.href = "/home";
                 }
             } catch (error) {
